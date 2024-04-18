@@ -1,5 +1,3 @@
-BOJ/.vs/
+.vs/
 
-BOJ/Debug/
-
-BOJ/*/Debug/
+x64/Debug/
