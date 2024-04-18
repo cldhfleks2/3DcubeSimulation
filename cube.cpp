@@ -12,7 +12,7 @@ struct Point3D {
     float x, y, z;
 };
 
-// Å¥ºê¸¦ ³ªÅ¸³»´Â Á¤Á¡ ÁÂÇ¥°ª
+// íë¸Œë¥¼ ë‚˜íƒ€ë‚´ëŠ” ì •ì  ì¢Œí‘œê°’
 vector<Point3D> vertices = {
     { -1.0f, -1.0f, -1.0f },
     { 1.0f, -1.0f, -1.0f },
@@ -24,17 +24,17 @@ vector<Point3D> vertices = {
     { -1.0f, 1.0f, 1.0f }
 };
 
-// Å¥ºê¸¦ ³ªÅ¸³»´Â ¸é
+// íë¸Œë¥¼ ë‚˜íƒ€ë‚´ëŠ” ë©´
 vector<vector<int>> faces = {
-    { 0, 1, 2, 3 }, // ¾Õ¸é
-    { 1, 5, 6, 2 }, // ¿À¸¥ÂÊ¸é
-    { 4, 0, 3, 7 }, // ¿ŞÂÊ¸é
-    { 5, 4, 7, 6 }, // µŞ¸é
-    { 3, 2, 6, 7 }, // À§ÂÊ¸é
-    { 0, 4, 5, 1 }  // ¾Æ·¡ÂÊ¸é
+    { 0, 1, 2, 3 }, // ì•ë©´
+    { 1, 5, 6, 2 }, // ì˜¤ë¥¸ìª½ë©´
+    { 4, 0, 3, 7 }, // ì™¼ìª½ë©´
+    { 5, 4, 7, 6 }, // ë’·ë©´
+    { 3, 2, 6, 7 }, // ìœ„ìª½ë©´
+    { 0, 4, 5, 1 }  // ì•„ë˜ìª½ë©´
 };
 
-// È¸Àü Çà·Ä
+// íšŒì „ í–‰ë ¬
 void rotate(vector<Point3D>& vertices, float angle, char axis) {
     float s = sin(angle);
     float c = cos(angle);
@@ -59,14 +59,14 @@ void rotate(vector<Point3D>& vertices, float angle, char axis) {
     }
 }
 
-// °¢µµ º¯È¯ ÇÔ¼ö
+// ê°ë„ ë³€í™˜ í•¨ìˆ˜
 float toRadians(float degrees) {
     return degrees * M_PI / 180.0f;
 }
 
-// ¸ŞÀÎ ÇÔ¼ö
+// ë©”ì¸ í•¨ìˆ˜
 int main() {
-    // Å¥ºê ÃÊ±âÈ­
+    // íë¸Œ ì´ˆê¸°í™”
     const int screenWidth = 800;
     const int screenHeight = 600;
     const float aspectRatio = (float)screenWidth / (float)screenHeight;
@@ -74,43 +74,52 @@ int main() {
     const float far = 100.0f;
     const float fov = toRadians(60.0f);
 
-    // ÄÜ¼ÖÃ¢¿¡¼­ Ãâ·ÂÇÏ±â À§ÇØ, ´ë·«ÀûÀÎ È­¸éÀ» ¸¸µì´Ï´Ù.
+    // ì½˜ì†”ì°½ì—ì„œ ì¶œë ¥í•˜ê¸° ìœ„í•´, ëŒ€ëµì ì¸ í™”ë©´ì„ ë§Œë“­ë‹ˆë‹¤.
     vector<char> screen(screenWidth * screenHeight, ' ');
 
-    // È¸Àü°ª ÃÊ±âÈ­
+    // íšŒì „ê°’ ì´ˆê¸°í™”
     float rotationX = 0.0;
     float rotationY = 0.0;
     float rotationZ = 0.0;
 
-    // È¸Àü°¢ ¼Óµµ
+    // íšŒì „ê° ì†ë„
     const float rotationSpeed = 0.02;
 
-    // ¹«ÇÑ ·çÇÁ
+    // ë¬´í•œ ë£¨í”„
     while (true) {
-        // È¸Àü Çà·Ä °è»ê
+        // íšŒì „ í–‰ë ¬ ê³„ì‚°
         vector<Point3D> transformedVertices = vertices;
         rotate(transformedVertices, rotationX, 'x');
         rotate(transformedVertices, rotationY, 'y');
         rotate(transformedVertices, rotationZ, 'z');
 
-        // È­¸é ÃÊ±âÈ­
+        // í™”ë©´ ì´ˆê¸°í™”
         for (int i = 0; i < screen.size(); i++) {
             screen[i] = ' ';
         }
 
-        // È­¸é¿¡ Å¥ºê ±×¸®±â
+        // í™”ë©´ì— íë¸Œ ê·¸ë¦¬ê¸°
         for (auto& face : faces) {
-            // Á¤¸éÀ¸·Î º¸ÀÌÁö ¾ÊÀ¸¸é ±×¸®Áö ¾Ê½À´Ï´Ù.
+            // ì •ë©´ìœ¼ë¡œ ë³´ì´ì§€ ì•Šìœ¼ë©´ ê·¸ë¦¬ì§€ ì•ŠìŠµë‹ˆë‹¤.
             Point3D normal = {
-                (transformedVertices[face[1]].y - transformedVertices[face[0]].y) * (transformedVertices[face[2]].z - transformedVertices[face[0]].z) - (transformedVertices[face[1]].z - transformedVertices[face[0]].z) * (transformedVertices[face[2]].y - transformedVertices[face[0]].y),
-                (transformedVertices[face[1]].z - transformedVertices[face[0]].z) * (transformedVertices[face[2]].x - transformedVertices[face[0]].x) - (transformedVertices[face[1]].x - transformedVertices[face[0]].x) * (transformedVertices[face[2]].z - transformedVertices[face[0]].z),
-                (transformedVertices[face[1]].x - transformedVertices[face[0]].x) * (transformedVertices[face[2]].y - transformedVertices[face[0]].y) - (transformedVertices[face[1]].y - transformedVertices[face[0]].y) * (transformedVertices[face[2]].x - transformedVertices[face[0]].x)
+                (transformedVertices[face[1]].y - transformedVertices[face[0]].y) * 
+            (transformedVertices[face[2]].z - transformedVertices[face[0]].z) - 
+            (transformedVertices[face[1]].z - transformedVertices[face[0]].z) * 
+            (transformedVertices[face[2]].y - transformedVertices[face[0]].y),
+                (transformedVertices[face[1]].z - transformedVertices[face[0]].z) * 
+            (transformedVertices[face[2]].x - transformedVertices[face[0]].x) - 
+            (transformedVertices[face[1]].x - transformedVertices[face[0]].x) * 
+            (transformedVertices[face[2]].z - transformedVertices[face[0]].z),
+                (transformedVertices[face[1]].x - transformedVertices[face[0]].x) * 
+            (transformedVertices[face[2]].y - transformedVertices[face[0]].y) - 
+            (transformedVertices[face[1]].y - transformedVertices[face[0]].y) * 
+            (transformedVertices[face[2]].x - transformedVertices[face[0]].x)
             };
             if (normal.z < 0) {
                 continue;
             }
 
-            // Á¤±ÔÈ­µÈ Á¤Á¡ ÁÂÇ¥
+            // ì •ê·œí™”ëœ ì •ì  ì¢Œí‘œ
             vector<Point3D> normalizedVertices;
             for (auto& index : face) {
                 Point3D vertex = transformedVertices[index];
@@ -119,7 +128,7 @@ int main() {
                 normalizedVertices.push_back({ x, y, vertex.z });
             }
 
-            // ½ºÅ©¸° ÁÂÇ¥
+            // ìŠ¤í¬ë¦° ì¢Œí‘œ
             vector<Point3D> screenVertices;
             for (auto& vertex : normalizedVertices) {
                 int x = (int)((vertex.x + 1.0f) * 0.5f * screenWidth);
@@ -127,10 +136,10 @@ int main() {
                 screenVertices.push_back({ (float)x, (float)y, vertex.z });
             }
 
-            // ¸é »ö»ó
+            // ë©´ ìƒ‰ìƒ
             char color = 'X';
 
-            // ¸é ±×¸®±â
+            // ë©´ ê·¸ë¦¬ê¸°
             for (int i = 0; i < screenVertices.size(); i++) {
                 Point3D p1 = screenVertices[i];
                 Point3D p2 = screenVertices[(i + 1) % screenVertices.size()];
@@ -178,7 +187,7 @@ int main() {
             }
         }
 
-        // È­¸é Ãâ·Â
+        // í™”ë©´ ì¶œë ¥
         for (int y = 0; y < screenHeight; y++) {
             for (int x = 0; x < screenWidth; x++) {
                 cout << screen[y * screenWidth + x];
@@ -186,7 +195,7 @@ int main() {
             cout << endl;
         }
 
-        // È¸Àü°¢ ¾÷µ¥ÀÌÆ®
+        // íšŒì „ê° ì—…ë°ì´íŠ¸
         rotationY += rotationSpeed;
         rotationZ += rotationSpeed;
     }
